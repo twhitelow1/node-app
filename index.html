@@ -2,6 +2,7 @@
 <html>
   <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <div class="container">
@@ -26,11 +27,8 @@
     <script>
       $(() => {
         $('#send').click(()=>{
-          var message ={
-            name: $('#name').val(),
-            message: $('#message').val()
-          }
-          postMessages(message)
+          var message = { name: $('#name').val(), message: $('#message').val()}
+          postMessage(message)
         })
         getMessages()
       })
@@ -45,9 +43,8 @@
         })
       }
 
-      function postMessages(message){
-        $.post('http://localhost:3000/messages', message
-        )
+      function postMessage(message){
+        $.post('http://localhost:3000/messages', message)
       }
     </script>
   </body>
