@@ -16,20 +16,24 @@ var Message = mongoose.model('Message', {
   message: String
 })
 
-var messages = [
-  { name: "Tim", message: "Hi!" },
-  { name: "Todd", message: "Howdy, Tim!" }
-]
 
 app.get('/messages', (req, res) => {
-  res.send(messages)
+  Message.find({}, (err, messages) => {
+    res.send(messages)
+  })
 })
 
 app.post('/messages', (req, res) => {
   var message = new Message(req.body)
-  messages.push(req.body)
-  io.emit('message', req.body) //event called message and passes req.body which contains the msg
-  res.sendStatus(200)
+
+  message.save((err) => {
+    if (err)
+      sendStatus(500)
+
+    messages.push(req.body)
+    io.emit('message', req.body) //event called message and passes req.body which contains the msg
+    res.sendStatus(200)
+  })
 })
 
 io.on('connection', (socket) => {
