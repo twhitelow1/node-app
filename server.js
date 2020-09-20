@@ -22,4 +22,4 @@ app.post('/messages', (req, res) => {
   res.sendStatus(200)
 })
 
-var server = app.listen(3000, () => console.log('Server is listening on port', server.address().port))
+var server = http.listen(3000, () => console.log('Server is listening on port', server.address().port))
