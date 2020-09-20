@@ -46,9 +46,8 @@
       }
 
       function postMessages(message){
-        $.post('http://localhost:3000/messages', message, (data) => {
-          data.forEach(addMessages);
-        })
+        $.post('http://localhost:3000/messages', message
+        )
       }
     </script>
   </body>
