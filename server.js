@@ -9,6 +9,8 @@ app.use(express.static(__dirname))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
+mongoose.Promise = Promise
+
 var dbUrl = 'mongodb+srv://ras-20:E1G2QzIRaxtQMG21@nodechat.i95u3.mongodb.net/nodechat?retryWrites=true&w=majority'
 
 var Message = mongoose.model('Message', {
@@ -23,17 +25,17 @@ app.get('/messages', (req, res) => {
   })
 })
 
-app.post('/messages', (req, res) => {
-  var message = new Message(req.body)
-
-  message.save((err) => {
-    if (err)
-      sendStatus(500)
-
-    messages.push(req.body)
+app.post('/messages', async (req, res) => {
+  try {
+    var message = new Message(req.body)
+    var savedMessage = await message.save()
     io.emit('message', req.body) //event called message and passes req.body which contains the msg
     res.sendStatus(200)
-  })
+
+  } catch (error) {
+    res.sendStatus(500)
+    return console.error(err)
+  }
 })
 
 io.on('connection', (socket) => {
